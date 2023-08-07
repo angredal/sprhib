@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import web.model.User;
@@ -22,7 +23,7 @@ public class UserController {
 
     @GetMapping("/users")
     public String getAllUsers(Model model) {
-    model.addAttribute("userList", userService.getAllUsers());
+    model.addAttribute("usersList", userService.getAllUsers());
     return "users";
     }
 
@@ -51,12 +52,18 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @PostMapping("/users/edit/{id}")
+    @PatchMapping("/users/{id}")
     public String updateUser(@PathVariable(value = "id") int id, @ModelAttribute("user") User user) {
         userService.updateUser(id, user);
         return "redirect:/users";
-
     }
+
+    @GetMapping("/users/edit/{id}")
+    public String newUser(Model model, @PathVariable(value = "id") int id) {
+        model.addAttribute("user", userService.getUserById(id));
+        return "userEdit";
+    }
+
 
 
 
